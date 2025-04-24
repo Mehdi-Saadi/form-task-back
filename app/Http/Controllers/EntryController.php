@@ -8,13 +8,11 @@ use Illuminate\Http\Request;
 class EntryController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display initial resource.
      */
-    public function index()
+    public function index(): ?Entry
     {
-        $latestRecord = Entry::latest();
-
-        dd($latestRecord);
+        return Entry::first('*');
     }
 
     /**
