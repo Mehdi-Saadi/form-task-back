@@ -14,15 +14,24 @@ class EntryController extends Controller
     /**
      * Display initial resource.
      */
-    public function index(): ?Entry
+    public function index(): JsonResponse
     {
-        return Entry::first('*');
+        $entry = Entry::first('*');
+
+        if ($entry) {
+            $entry->photos = collect($entry->photos)->map(fn ($photo) => [
+                'name' => $photo,
+                'url' => "/entry/$photo",
+            ]);
+        }
+
+        return response()->json($entry);
     }
 
     /**
      * Store or Update new resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): Response
     {
         $validated = $request->validate([
             'title' => ['required', 'max:255'],
@@ -36,10 +45,10 @@ class EntryController extends Controller
         if ($firstItem) {
             $firstItem->update($validated);
         } else {
-            $firstItem = Entry::create($validated);
+            Entry::create($validated);
         }
 
-        return $firstItem;
+        return response()->noContent();
     }
 
     public function uploadPhoto(Request $request): JsonResponse
