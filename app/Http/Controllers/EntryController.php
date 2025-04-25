@@ -37,7 +37,7 @@ class EntryController extends Controller
             'title' => ['required', 'max:255'],
             'description' => ['required'],
             'date' => ['required', 'date'],
-            'photos' => ['required', 'array'],
+            'photos' => ['array'],
         ]);
 
         $firstItem = Entry::first('*');
